@@ -1,50 +1,46 @@
-const express = require("express");
-const { Pool } = require("pg");
-
+const { Pool } = require('pg');
+const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 app.use(express.json());
 
-const pool = new Pool(); // Railway injecte automatiquement les variables PG
-
-// Enregistrement d'une transaction
-app.post("/pay", async (req, res) => {
-  const { phone, operator, amount, merchant_id } = req.body;
-
-  if (!phone || !operator || !amount || !merchant_id) {
-    return res.status(400).json({ message: "Champs manquants." });
+const pool = new Pool({
+  host: process.env.PGHOST,
+  port: process.env.PGPORT,
+  user: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
+  ssl: {
+    rejectUnauthorized: false
   }
+});
 
+app.post('/pay', async (req, res) => {
+  const { phone, operator, amount, merchant_id } = req.body;
   try {
     const result = await pool.query(
-      `INSERT INTO transactions (phone, operator, amount, merchant_id, status)
-       VALUES ($1, $2, $3, $4, 'pending')
-       RETURNING id, created_at`,
-      [phone, operator, amount, merchant_id]
+      'INSERT INTO transactions (phone, operator, amount, merchant_id, status) VALUES ($1, $2, $3, $4, $5) RETURNING id, created_at',
+      [phone, operator, amount, merchant_id, 'pending']
     );
-
-    res.json({
-      message: "Paiement enregistré avec succès.",
-      transaction: result.rows[0]
-    });
-  } catch (err) {
-    console.error("Erreur base de données :", err);
-    res.status(500).json({ message: "Erreur serveur." });
+    res.json({ message: 'Paiement enregistré avec succès.', transaction: result.rows[0] });
+  } catch (error) {
+    console.error('Erreur base de données :', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
   }
 });
 
-// Voir toutes les transactions
-app.get("/transactions", async (req, res) => {
+app.get('/transactions', async (req, res) => {
   try {
-    const result = await pool.query(`SELECT * FROM transactions ORDER BY created_at DESC`);
+    const result = await pool.query('SELECT * FROM transactions');
     res.json(result.rows);
-  } catch (err) {
-    console.error("Erreur base de données :", err);
-    res.status(500).json({ message: "Erreur serveur." });
+  } catch (error) {
+    console.error('Erreur base de données :', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Serveur démarré sur le port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Serveur démarré sur le port ${port}`);
 });
+fix: use Railway environment variables for PostgreSQL
