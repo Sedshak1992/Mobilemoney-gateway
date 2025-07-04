@@ -43,4 +43,3 @@ app.get('/transactions', async (req, res) => {
 app.listen(port, () => {
   console.log(`Serveur démarré sur le port ${port}`);
 });
-fix: use Railway environment variables for PostgreSQL
