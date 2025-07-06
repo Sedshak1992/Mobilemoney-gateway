@@ -14,9 +14,9 @@ app.get('/', (req, res) => {
 app.post('/pay', async (req, res) => {
   try {
     const token = await getAccessToken();
-    res.json({ message: 'Token MVola récupéré', token });
+    res.json({ message: 'Token MVola récupéré avec succès', token });
   } catch (error) {
-    res.status(500).json({ message: 'Erreur lors du token MVola', error: error.message });
+    res.status(500).json({ message: 'Erreur lors de la récupération du token MVola', error: error.message });
   }
 });
 
