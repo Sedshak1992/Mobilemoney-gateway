@@ -1,3 +1,6 @@
+console.log("🔑 Clé MVola =", process.env.MVOLA_CONSUMER_KEY);
+console.log("🕵️‍♂️ Secret MVola =", process.env.MVOLA_CONSUMER_SECRET);
+
 const express = require('express');
 require('dotenv').config();
 const { getAccessToken } = require('./authMvola');
