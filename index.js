@@ -1,5 +1,6 @@
 console.log("🔑 Clé MVola =", process.env.MVOLA_CONSUMER_KEY);
 console.log("🕵️‍♂️ Secret MVola =", process.env.MVOLA_CONSUMER_SECRET);
+console.log("Forcing redeploy " + new Date());
 
 const express = require('express');
 require('dotenv').config();
