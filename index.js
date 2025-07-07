@@ -28,6 +28,9 @@ app.get('/debug-env', (req, res) => {
   });
 });
 
+console.log("🔍 Variables d’environnement détectées par Railway :");
+console.log(process.env);
+
 app.listen(port, () => {
   console.log(`Serveur démarré sur le port ${port}`);
 });
