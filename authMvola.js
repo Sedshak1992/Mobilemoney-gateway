@@ -32,7 +32,7 @@ async function getAccessToken() {
 
     return cachedToken;
   } catch (error) {
-    console.error('Erreur récupération token MVola:', error.response?.data || error.message);
+    console.error('❌ Erreur récupération token MVola:', error.response?.data || error.message);
     throw error;
   }
 }
