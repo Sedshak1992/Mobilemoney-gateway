@@ -1,3 +1,7 @@
+// 🔧 Injection TEMPORAIRE des variables MVola pour contourner Railway
+process.env.MVOLA_CONSUMER_KEY = process.env.MVOLA_CONSUMER_KEY || '0LPyJZjZW_V4JnbIIdZHb4bfkfIa';
+process.env.MVOLA_CONSUMER_SECRET = process.env.MVOLA_CONSUMER_SECRET || 'FM0LhltxmRIWnRt0VNFfJ2nhAa0a';
+
 console.log("🔑 Clé MVola =", process.env.MVOLA_CONSUMER_KEY);
 console.log("🕵️‍♂️ Secret MVola =", process.env.MVOLA_CONSUMER_SECRET);
 console.log("Forcing redeploy " + new Date());
@@ -24,7 +28,6 @@ app.post('/pay', async (req, res) => {
   }
 });
 
-// ✅ Route ajoutée pour vérifier les variables d’environnement sur Railway
 app.get('/debug-env', (req, res) => {
   res.json({
     key: process.env.MVOLA_CONSUMER_KEY,
@@ -36,5 +39,5 @@ console.log("🔍 Variables d’environnement détectées par Railway :");
 console.log(process.env);
 
 app.listen(port, () => {
-  console.log(`Serveur démarré sur le port ${port}`);
+  console.log(`🚀 Serveur démarré sur le port ${port}`);
 });
