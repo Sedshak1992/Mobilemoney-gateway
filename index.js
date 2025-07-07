@@ -20,6 +20,14 @@ app.post('/pay', async (req, res) => {
   }
 });
 
+// ✅ Route ajoutée pour vérifier les variables d’environnement sur Railway
+app.get('/debug-env', (req, res) => {
+  res.json({
+    key: process.env.MVOLA_CONSUMER_KEY,
+    secret: process.env.MVOLA_CONSUMER_SECRET
+  });
+});
+
 app.listen(port, () => {
   console.log(`Serveur démarré sur le port ${port}`);
 });
