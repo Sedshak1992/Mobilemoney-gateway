@@ -1,43 +1,45 @@
-// 🔧 Injection TEMPORAIRE des variables MVola pour contourner Railway
-process.env.MVOLA_CONSUMER_KEY = process.env.MVOLA_CONSUMER_KEY || '0LPyJZjZW_V4JnbIIdZHb4bfkfIa';
-process.env.MVOLA_CONSUMER_SECRET = process.env.MVOLA_CONSUMER_SECRET || 'FM0LhltxmRIWnRt0VNFfJ2nhAa0a';
-
-console.log("🔑 Clé MVola =", process.env.MVOLA_CONSUMER_KEY);
-console.log("🕵️‍♂️ Secret MVola =", process.env.MVOLA_CONSUMER_SECRET);
-console.log("Forcing redeploy " + new Date());
-
 const express = require('express');
-require('dotenv').config();
-const { getAccessToken } = require('./authMvola');
-
+const axios = require('axios');
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
+// Variables d’environnement MVola
+const MVOLA_CONSUMER_KEY = process.env.MVOLA_CONSUMER_KEY;
+const MVOLA_CONSUMER_SECRET = process.env.MVOLA_CONSUMER_SECRET;
+
+console.log("🔑 Clé MVola =", MVOLA_CONSUMER_KEY);
+console.log("🕵️‍♂️ Secret MVola =", MVOLA_CONSUMER_SECRET);
+
+// Route GET '/' simple
 app.get('/', (req, res) => {
   res.send('Gateway OK');
 });
 
+// Route POST '/pay' : récupère un token MVola via l’API (exemple)
 app.post('/pay', async (req, res) => {
   try {
-    const token = await getAccessToken();
-    res.json({ message: 'Token MVola récupéré avec succès', token });
+    // Exemple d'appel API MVola pour obtenir token
+    // Remplace l'URL et headers selon la doc officielle MVola
+    const response = await axios.post('https://api.mvola.mg/oauth/token', null, {
+      headers: {
+        'Authorization': 'Basic ' + Buffer.from(`${MVOLA_CONSUMER_KEY}:${MVOLA_CONSUMER_SECRET}`).toString('base64'),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      params: {
+        grant_type: 'client_credentials'
+      }
+    });
+
+    res.json({ success: true, token: response.data.access_token });
   } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de la récupération du token MVola', error: error.message });
+    console.error(error.response ? error.response.data : error.message);
+    res.status(500).json({ success: false, message: 'Erreur lors de la récupération du token MVola' });
   }
 });
 
-app.get('/debug-env', (req, res) => {
-  res.json({
-    key: process.env.MVOLA_CONSUMER_KEY,
-    secret: process.env.MVOLA_CONSUMER_SECRET
-  });
-});
-
-console.log("🔍 Variables d’environnement détectées par Railway :");
-console.log(process.env);
-
+// Démarrage serveur
 app.listen(port, () => {
-  console.log(`🚀 Serveur démarré sur le port ${port}`);
+  console.log(`Serveur démarré sur le port ${port}`);
 });
