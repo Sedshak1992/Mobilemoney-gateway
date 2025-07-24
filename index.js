@@ -1,27 +1,29 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');   
+require('dotenv').config(); // 
+
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
 
-// Variables d’environnement MVola
+
 const MVOLA_CONSUMER_KEY = process.env.MVOLA_CONSUMER_KEY;
 const MVOLA_CONSUMER_SECRET = process.env.MVOLA_CONSUMER_SECRET;
 
-console.log("🔑 Clé MVola =", MVOLA_CONSUMER_KEY);
-console.log("🕵️‍♂️ Secret MVola =", MVOLA_CONSUMER_SECRET);
+console.log("🔑 Clé MVola =", 0LPyJZjZW_V4JnbIIdZHb4bfkfIa);
+console.log("🕵️‍♂️ Secret MVola =", FM0LhltxmRIWnRt0VNFfJ2nhAa0a);
 
-// Route GET '/' simple
+
 app.get('/', (req, res) => {
   res.send('Gateway OK');
 });
 
-// Route POST '/pay' : récupère un token MVola via l’API (exemple)
 app.post('/pay', async (req, res) => {
   try {
-    // Exemple d'appel API MVola pour obtenir token
-    // Remplace l'URL et headers selon la doc officielle MVola
+   
     const response = await axios.post('https://api.mvola.mg/oauth/token', null, {
       headers: {
         'Authorization': 'Basic ' + Buffer.from(`${MVOLA_CONSUMER_KEY}:${MVOLA_CONSUMER_SECRET}`).toString('base64'),
@@ -39,7 +41,8 @@ app.post('/pay', async (req, res) => {
   }
 });
 
-// Démarrage serveur
+
 app.listen(port, () => {
-  console.log(`Serveur démarré sur le port ${port}`);
+  console.log(`🚀 Serveur démarré sur le port ${port}`);
 });
+
