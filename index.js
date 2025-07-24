@@ -13,8 +13,8 @@ app.use(express.json());
 const MVOLA_CONSUMER_KEY = process.env.MVOLA_CONSUMER_KEY;
 const MVOLA_CONSUMER_SECRET = process.env.MVOLA_CONSUMER_SECRET;
 
-console.log("🔑 Clé MVola =", 0LPyJZjZW_V4JnbIIdZHb4bfkfIa);
-console.log("🕵️‍♂️ Secret MVola =", FM0LhltxmRIWnRt0VNFfJ2nhAa0a);
+console.log("🔑 Clé MVola =", process.env.MVOLA_CONSUMER_KEY);
+console.log("🕵️‍♂️ Secret MVola =", process.env.MVOLA_CONSUMER_SECRET);
 
 
 app.get('/', (req, res) => {
